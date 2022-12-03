@@ -28,6 +28,12 @@ const STRAT_INDEX = {
   "win": 0,
 } as const;
 
+const OUTCOMES = {
+  "lose": 0,
+  "draw": 3,
+  "win": 6,
+} as const;
+
 type YOU = "X" | "Y" | "Z";
 type OPPONENT = "A" | "B" | "C";
 
@@ -47,24 +53,18 @@ export const part1 = (input: string) => {
     const you = round[2] as YOU;
 
     const shapeScore = POINT_SHAPE[CHOICES_YOU[you]];
-    const determineOutcome = (o: OPPONENT, y: YOU) => {
-      const yourPlay = CHOICES_YOU[y];
-      const opponentPlay = CHOICES_OPPONENT[o];
+    const yourPlay = CHOICES_YOU[you];
+    const opponentPlay = CHOICES_OPPONENT[opponent];
 
-      if (yourPlay === opponentPlay) {
-        return 3;
-      }
-      console.log(outcomes[yourPlay]);
+    if (yourPlay === opponentPlay) {
+      return 3;
+    }
 
-      const score = outcomes[yourPlay].indexOf(opponentPlay) * 6;
-
-      return score;
-    };
-
-    const outcomeScore = determineOutcome(opponent, you);
+    const outcomeScore = outcomes[yourPlay].indexOf(opponentPlay) * 6;
 
     return shapeScore + outcomeScore;
   });
+
   return s.reduce((p, a) => p + a, 0);
 };
 
@@ -73,33 +73,22 @@ export const part2 = (input: string) => {
     const opponent = round[0] as OPPONENT;
     const you = round[2] as YOU;
 
+    const opponentPlay = CHOICES_OPPONENT[opponent];
+
+    const strat = STRAT[you];
+
+    const stratIndex = STRAT_INDEX[strat];
+
+    if (stratIndex === -1) {
+      return POINT_SHAPE[opponentPlay];
+    }
+    const b = outcomes[opponentPlay];
+
+    const c = b[stratIndex];
+
     const outcome = STRAT[you];
 
-    let outcomesScore = 0;
-
-    if (outcome === "draw") outcomesScore = 3;
-    if (outcome === "lose") outcomesScore = 0;
-    if (outcome === "win") outcomesScore = 6;
-    const determineShapeScore = (o: OPPONENT, y: YOU) => {
-      const opponentPlay = CHOICES_OPPONENT[o];
-      const strat = STRAT[y];
-
-      const stratIndex = STRAT_INDEX[strat];
-
-      const b = outcomes[opponentPlay];
-
-      if (stratIndex === -1) {
-        return POINT_SHAPE[opponentPlay];
-      }
-
-      const c = b[stratIndex];
-
-      return POINT_SHAPE[c];
-    };
-
-    const shapeScore = determineShapeScore(opponent, you);
-
-    return outcomesScore + shapeScore;
+    return OUTCOMES[outcome] + POINT_SHAPE[c];
   });
   return s.reduce((p, a) => p + a, 0);
 };
