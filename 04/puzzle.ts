@@ -1,21 +1,16 @@
-const p = (s: string) => parseInt(s, 10);
 export const part1 = (input: string) => {
   const line = input.split("\n");
 
   const a = line.filter((groups) => {
-    const [g1, g2] = groups.split(",");
+    const [g1, g2] = groups.split(",").map((g) => g.split("-").map(Number));
 
-    const g1Numbers = g1.split("-");
-    const g2Numbers = g2.split("-");
-
-    const [lowestStartGroup, highestGroupStart] =
-      p(g1Numbers[0]) < p(g2Numbers[0])
-        ? [g1Numbers, g2Numbers]
-        : [g2Numbers, g1Numbers];
+    const [lowestStartGroup, highestGroupStart] = g1[0] < g2[0]
+      ? [g1, g2]
+      : [g2, g1];
 
     if (
-      p(highestGroupStart[1]) > p(lowestStartGroup[1]) &&
-      p(highestGroupStart[0]) !== p(lowestStartGroup[0])
+      highestGroupStart[1] > lowestStartGroup[1] &&
+      highestGroupStart[0] !== lowestStartGroup[0]
     ) {
       return false;
     }
@@ -30,19 +25,15 @@ export const part2 = (input: string) => {
   const line = input.split("\n");
 
   const a = line.filter((groups) => {
-    const [g1, g2] = groups.split(",");
+    const [g1, g2] = groups.split(",").map((g) => g.split("-").map(Number));
 
-    const g1Numbers = g1.split("-");
-    const g2Numbers = g2.split("-");
-
-    const [lowestStartGroup, highestGroupStart] =
-      p(g1Numbers[0]) < p(g2Numbers[0])
-        ? [g1Numbers, g2Numbers]
-        : [g2Numbers, g1Numbers];
+    const [lowestStartGroup, highestGroupStart] = g1[0] < g2[0]
+      ? [g1, g2]
+      : [g2, g1];
 
     if (
-      p(highestGroupStart[0]) > p(lowestStartGroup[1]) &&
-      p(highestGroupStart[0]) !== p(lowestStartGroup[0])
+      highestGroupStart[0] > lowestStartGroup[1] &&
+      highestGroupStart[0] !== lowestStartGroup[0]
     ) {
       return false;
     }
