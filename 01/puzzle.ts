@@ -1,19 +1,27 @@
 export const part1 = (input: string) => {
-  // distinquish the groups - split one group into 3 seperate groups
-  // add calories of each group - go one by one for each group and add the calories
-  // compare them and find the greatest - from that total. get the maximum
+  const addedCaloriesArray = input.split("\n\n").map((value) => value.split("\n"));
+  const sumArray = addedCaloriesArray.map((value) => 
+    value.reduce((sum, current) => Number(sum)+ Number(current),0)
+  )
 
-  return Math.max(
-    ...input.split("\n\n").map((value) => value.split("\n")).map((v) =>
-      v.reduce((prev, a) => prev + Number(a), 0)
-    ),
-  );
+  return Math.max(...sumArray);
 };
 
 export const part2 = (input: string) => {
-  return input.split("\n\n").map((value) => value.split("\n")).map((v) =>
-    v.reduce((prev, a) => prev + Number(a), 0)
-  ).sort((a, b) => b - a).splice(0, 3).reduce((prev, a) => prev + a, 0);
+  const addedCaloriesArray = input.split("\n\n").map((value) => value.split("\n"));
+  const sumArray = addedCaloriesArray.map((value) => 
+    value.reduce((sum, current) => Number(sum)+ Number(current),0)
+  )
+
+  const maxElf = Math.max(...sumArray);
+  sumArray.splice(sumArray.indexOf(maxElf), 1)
+  const secondElf = Math.max(...sumArray);
+  sumArray.splice(sumArray.indexOf(secondElf), 1)
+  const thirdElf = Math.max(...sumArray);
+  sumArray.splice(sumArray.indexOf(thirdElf), 1)
+
+  return maxElf + secondElf + thirdElf;
+
 };
 
 export const main = () => {
